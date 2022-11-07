@@ -59,10 +59,14 @@ public class SimplexMatrix {
     public void solve(){
 
         int out = 0;
+        this.printMatrix();
 
         while(out == 0){
 
             out = MathUtility.simplexIteration(matrix_data);
+            if(out == 1){
+                break;
+            }
             this.printMatrix();
 
         }

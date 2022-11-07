@@ -76,6 +76,7 @@ public class MathUtility {
 
         int[] pivot = calculatePivot(inMatrix);
 
+        System.out.println(pivot[1]);
         if(pivot[1] == -1){
             return 1;
         }
@@ -193,7 +194,8 @@ public class MathUtility {
 
         for(int i = 0; i < inMatrix[pivot[0]].length; i++){
 
-            inMatrix[pivot[0]][i] = ((new BigDecimal(inMatrix[pivot[0]][i])).divide(pivotElement)).toString();
+            //inMatrix[pivot[0]][i] = ((new BigDecimal(inMatrix[pivot[0]][i])).divide(pivotElement, RoundingMode.HALF_EVEN)).toString();
+            inMatrix[pivot[0]][i] = String.valueOf(Double.parseDouble(inMatrix[pivot[0]][i])/pivotElement.doubleValue());
             inMatrix[pivot[0]][i] = simplifyStringToBigDecimal(inMatrix[pivot[0]][i]).toString();
 
         }
