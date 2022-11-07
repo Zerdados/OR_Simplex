@@ -21,13 +21,14 @@ public class SimplexMatrix {
 
     public void printMatrix(){
 
-        //gui.printMatrix(matrixData);
+        gui.printStringMatrix(matrix_data);
 
     }
 
     public void inputData(){
 
         String input;
+        matrix_data[0][var + res] = "0";
 
         for(int i = 0; i < matrix_data.length; i++){
 
@@ -57,7 +58,7 @@ public class SimplexMatrix {
 
     public void solve(){
 
-        gui.printStringMatrix(matrix_data);
+        //gui.printStringMatrix(matrix_data);
 
     }
 }

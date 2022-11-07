@@ -65,17 +65,18 @@ public class SimpleSimplex {
 
         }
 
-        printMatrix();
-        simplex_gui.printMatrix(simplexMatrix);
-        MathUtility.simplexIteration(simplexMatrix);
-        System.out.println();
-        printMatrix();
-        simplex_gui.printMatrix(simplexMatrix);
-        MathUtility.simplexIteration(simplexMatrix);
-        System.out.println();
-        printMatrix();
-        simplex_gui.printMatrix(simplexMatrix);
         matrix.solve();
+        printMatrix();
+        //simplex_gui.printMatrix(simplexMatrix);
+        MathUtility.simplexIteration(simplexMatrix);
+        System.out.println();
+        printMatrix();
+        //simplex_gui.printMatrix(simplexMatrix);
+        MathUtility.simplexIteration(simplexMatrix);
+        System.out.println();
+        printMatrix();
+        //simplex_gui.printMatrix(simplexMatrix);
+        matrix.printMatrix();
         simplex_gui.setSize(500,700);
         simplex_gui.setVisible(true);
 
