@@ -76,7 +76,7 @@ public class SimpleSimplex {
         System.out.println();
         printMatrix();
         //simplex_gui.printMatrix(simplexMatrix);
-        matrix.printMatrix();
+        //matrix.printMatrix();
         simplex_gui.setSize(500,700);
         simplex_gui.setVisible(true);
 

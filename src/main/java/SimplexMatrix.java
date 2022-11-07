@@ -58,6 +58,14 @@ public class SimplexMatrix {
 
     public void solve(){
 
+        int out = 0;
+
+        while(out == 0){
+
+            out = MathUtility.simplexIteration(matrix_data);
+            this.printMatrix();
+
+        }
         //gui.printStringMatrix(matrix_data);
 
     }
