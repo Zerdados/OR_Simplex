@@ -72,6 +72,20 @@ public class MathUtility {
 
     }
 
+    public static int simplexIteration(String[][] inMatrix) {
+
+        int[] pivot = calculatePivot(inMatrix);
+
+        if(pivot[1] == -1){
+            return 1;
+        }
+
+        rowNormalization(inMatrix, pivot);
+        columnNormalization(inMatrix, pivot);
+        return 0;
+
+    }
+
     //Calculates the pivot element for a given matrix using the most-negative strategy
     private static int[] calculatePivot(double[][] inMatrix){
 
@@ -116,6 +130,7 @@ public class MathUtility {
     }
 
 
+    //Calculates and returns the pivot element of a given simplex matrix
     private static int[] calculatePivot(String[][] inMatrix){
 
         int pivot_col = 0;
@@ -173,6 +188,17 @@ public class MathUtility {
 
     }
 
+    private static void rowNormalization(String[][] inMatrix, int[] pivot){
+        BigDecimal pivotElement = new BigDecimal(inMatrix[pivot[0]][pivot[1]]);
+
+        for(int i = 0; i < inMatrix[pivot[0]].length; i++){
+
+            inMatrix[pivot[0]][i] = ((new BigDecimal(inMatrix[pivot[0]][i])).divide(pivotElement)).toString();
+            inMatrix[pivot[0]][i] = simplifyStringToBigDecimal(inMatrix[pivot[0]][i]).toString();
+
+        }
+    }
+
     private static void columnNormalization(double[][] inMatrix, int[] pivot){
 
 
@@ -190,6 +216,31 @@ public class MathUtility {
                 //inMatrix[i][j] = simplifyDouble(BigDecimal.valueOf(inMatrix[i][j]).add(factor.multiply(BigDecimal.valueOf(inMatrix[pivot[0]][j]))).doubleValue()).doubleValue();
                 double factor2 = simplifyDouble(factor * inMatrix[pivot[0]][j]).doubleValue();
                 inMatrix[i][j] = simplifyDouble(inMatrix[i][j] + factor2).doubleValue();
+
+            }
+
+        }
+
+    }
+
+    private static void columnNormalization(String[][] inMatrix, int[] pivot){
+
+        for(int i = 0; i < inMatrix.length; i++){
+
+            if(i == pivot[0]){
+                continue;
+            }
+
+            //double factor = inMatrix[i][pivot[1]] * -1.0;
+            BigDecimal factor = (new BigDecimal(inMatrix[i][pivot[1]])).negate();
+
+            for(int j = 0; j < inMatrix[i].length; j++){
+
+                //inMatrix[i][j] = simplifyDouble(BigDecimal.valueOf(inMatrix[i][j]).add(factor.multiply(BigDecimal.valueOf(inMatrix[pivot[0]][j]))).doubleValue()).doubleValue();
+                BigDecimal factor2 = simplifyStringToBigDecimal((factor.multiply(new BigDecimal(inMatrix[pivot[0]][j]))).toString());
+                //double factor2 = simplifyDouble(factor * inMatrix[pivot[0]][j]).doubleValue();
+                inMatrix[i][j] = simplifyStringToBigDecimal(((new BigDecimal(inMatrix[i][j])).add(factor2)).toString()).toString();
+                //inMatrix[i][j] = simplifyDouble(inMatrix[i][j] + factor2).doubleValue();
 
             }
 
