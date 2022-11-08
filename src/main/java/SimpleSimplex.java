@@ -14,7 +14,7 @@ public class SimpleSimplex {
      * Also adds exit button functionality to the GuiProgram
      * @param args does nothing
      */
-    public static void main(String args[]){
+    public static void main(String[] args){
 
         simplex_gui = new GuiProgram(var,res);
 

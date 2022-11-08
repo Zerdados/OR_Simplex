@@ -3,12 +3,15 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 public class MathUtility {
-
-    //TODO Comments for all functions
+    
     private static DecimalFormat df = new DecimalFormat("0.###E0");
 
-    //Takes a double value as input and transforms it to exponential notation with a matrissa length of for
-    //Returns exponential notation as a String
+    /**
+     * Transforms a double value into a String with exponential notation and a matrissa length of 4. <br>
+     * Uses half-even rounding.
+     * @param in double to be transformed
+     * @return String in exponential notation
+     */
     public static String doubleToFourMatrissa(double in){
 
         df.setRoundingMode(RoundingMode.HALF_EVEN);
@@ -16,6 +19,13 @@ public class MathUtility {
 
     }
 
+    /**
+     * Transforms a String representing a decimal into a String with exponential notation and a matrissa
+     * length of 4. <br>
+     * Uses half-even rounding.
+     * @param in String to be transformed
+     * @return String in exponential notation
+     */
     private static String stringToFourMatrissa(String in){
 
         df.setRoundingMode(RoundingMode.HALF_EVEN);
@@ -23,7 +33,11 @@ public class MathUtility {
 
     }
 
-    //Takes a String representing a number in exponential notation and returns that number as a BigDecimal
+    /**
+     * Transforms a String representing a decimal in exponential notation, returns its value as a BigDecimal.
+     * @param in String in exponential notation
+     * @return BigDecimal representing value
+     */
     public static BigDecimal fourMatrissaToBigDecimal(String in){
 
         String[] splitIn = in.split("E");
@@ -36,28 +50,35 @@ public class MathUtility {
 
     }
 
-    //Takes a double value as input and returns as a BigDecimal with a matrissa length of four
+    /**
+     * Takes a double, returns a BigDecimal with same value and matrissa length of four
+     * @param in double to be transformed
+     * @return BigDecimal
+     */
     public static BigDecimal simplifyDouble(double in){
 
         return fourMatrissaToBigDecimal(doubleToFourMatrissa(in));
 
     }
 
-    //TODO: Finish up this function
-    public static String simplifyString(String in){
-
-        return in;
-
-    }
-
+    /**
+     * Takes a String representing a decimal, returns a BigDecimal with same value and matrissa length of four
+     * @param in double to be transformed
+     * @return BigDecimal
+     */
     public static BigDecimal simplifyStringToBigDecimal(String in){
 
         return fourMatrissaToBigDecimal(stringToFourMatrissa(in));
 
     }
 
-    //Calculates one simplex iteration on a given matrix
-    //Returns 0 if successful, returns 1 if matrix is already solved
+    /**
+     * Calculates one simplex iteration in a double matrix, saves result in same matrix. <br>
+     * Detailed calculation consists of: Finding the pivot element, normalizing the pivot-row,
+     * then normalizing all remaining rows.
+     * @param inMatrix double-matrix containing the simplex tableau to be iterated upon
+     * @return 0 if iteration was successful, 1 if simplex tableau was already solved
+     */
     public static int simplexIteration(double[][] inMatrix) {
 
         int[] pivot = calculatePivot(inMatrix);
@@ -72,6 +93,13 @@ public class MathUtility {
 
     }
 
+    /**
+     * Calculates one simplex iteration in a String matrix, saves result in same matrix. <br>
+     * Detailed calculation consists of: Finding the pivot element, normalizing the pivot-row,
+     * then normalizing all remaining rows.
+     * @param inMatrix String-Matrix containing the simplex tableau to be iterated upon
+     * @return 0 if iteration was successful, 1 if simplex tableau was already solved
+     */
     public static int simplexIteration(String[][] inMatrix) {
 
         int[] pivot = calculatePivot(inMatrix);
@@ -87,7 +115,11 @@ public class MathUtility {
 
     }
 
-    //Calculates the pivot element for a given matrix using the most-negative strategy
+    /**
+     * Calculates the pivot element for a given simplex matrix using the most-negative strategy.
+     * @param inMatrix simplex tableau as a double-matrix
+     * @return position of pivot element as int-array, {0, -1} if no element was found
+     */
     private static int[] calculatePivot(double[][] inMatrix){
 
         int pivot_col = 0;
@@ -131,7 +163,11 @@ public class MathUtility {
     }
 
 
-    //Calculates and returns the pivot element of a given simplex matrix
+    /**
+     * Calculates the pivot element for a given simplex matrix using the most-negative strategy.
+     * @param inMatrix simplex tableau as a String-Matrix
+     * @return position of pivot element as int-array, {0, -1} if no element was found
+     */
     private static int[] calculatePivot(String[][] inMatrix){
 
         int pivot_col = 0;
@@ -175,32 +211,48 @@ public class MathUtility {
 
     }
 
+    /**
+     * Normalizes the pivot-row in a simplex tableau. Every element in the row is divided by the pivot-element.
+     * @param inMatrix simplex tableau as a double-matrix
+     * @param pivot position of the pivot-element as an int-array
+     */
     private static void rowNormalization(double[][] inMatrix, int[] pivot){
 
         double pivotElement = inMatrix[pivot[0]][pivot[1]];
-        //BigDecimal pivotElement = new BigDecimal(inMatrix[pivot[0]][pivot[1]]);
 
         for(int i = 0; i < inMatrix[pivot[0]].length; i++){
 
             inMatrix[pivot[0]][i] = simplifyDouble(inMatrix[pivot[0]][i]/pivotElement).doubleValue();
-            //inMatrix[pivot[0]][i] = simplifyDouble((BigDecimal.valueOf(inMatrix[pivot[0]][i]).divide(pivotElement)).doubleValue()).doubleValue();
 
         }
 
     }
 
+    /**
+     * Normalizes the pivot-row in a simplex tableau. Every element in the row is divided by the pivot-element.
+     * @param inMatrix simplex tableau as a String-Matrix
+     * @param pivot position of the pivot-element as an int-array
+     */
     private static void rowNormalization(String[][] inMatrix, int[] pivot){
         BigDecimal pivotElement = new BigDecimal(inMatrix[pivot[0]][pivot[1]]);
 
         for(int i = 0; i < inMatrix[pivot[0]].length; i++){
 
-            //inMatrix[pivot[0]][i] = ((new BigDecimal(inMatrix[pivot[0]][i])).divide(pivotElement, RoundingMode.HALF_EVEN)).toString();
             inMatrix[pivot[0]][i] = String.valueOf(Double.parseDouble(inMatrix[pivot[0]][i])/pivotElement.doubleValue());
             inMatrix[pivot[0]][i] = simplifyStringToBigDecimal(inMatrix[pivot[0]][i]).toString();
 
         }
     }
 
+    /**
+     * Normalizes the pivot-column in a simplex tableau. For every row except the pivot-row, a factor is calculated by
+     * multiplying the element that is in that row and the pivot-column with -1.<br>
+     * Then, every element of that row gets that factor multiplied with the element in the same column and pivot-row
+     * added to it.<br>
+     * The result should have every element in the pivot-column except the pivot element as 0.
+     * @param inMatrix simplex tableau as a double-matrix
+     * @param pivot position of the pivot-element as an int-array
+     */
     private static void columnNormalization(double[][] inMatrix, int[] pivot){
 
 
@@ -211,11 +263,9 @@ public class MathUtility {
             }
 
             double factor = inMatrix[i][pivot[1]] * -1.0;
-            //BigDecimal factor = new BigDecimal(inMatrix[i][pivot[1]] * -1.0);
 
             for(int j = 0; j < inMatrix[i].length; j++){
 
-                //inMatrix[i][j] = simplifyDouble(BigDecimal.valueOf(inMatrix[i][j]).add(factor.multiply(BigDecimal.valueOf(inMatrix[pivot[0]][j]))).doubleValue()).doubleValue();
                 double factor2 = simplifyDouble(factor * inMatrix[pivot[0]][j]).doubleValue();
                 inMatrix[i][j] = simplifyDouble(inMatrix[i][j] + factor2).doubleValue();
 
@@ -225,6 +275,15 @@ public class MathUtility {
 
     }
 
+    /**
+     * Normalizes the pivot-column in a simplex tableau. For every row except the pivot-row, a factor is calculated by
+     * multiplying the element that is in that row and the pivot-column with -1.<br>
+     * Then, every element of that row gets that factor multiplied with the element in the same column and pivot-row
+     * added to it.<br>
+     * The result should have every element in the pivot-column except the pivot element as 0.
+     * @param inMatrix simplex tableau as a String-Matrix
+     * @param pivot position of the pivot-element as an int-array
+     */
     private static void columnNormalization(String[][] inMatrix, int[] pivot){
 
         for(int i = 0; i < inMatrix.length; i++){
@@ -233,42 +292,17 @@ public class MathUtility {
                 continue;
             }
 
-            //double factor = inMatrix[i][pivot[1]] * -1.0;
             BigDecimal factor = (new BigDecimal(inMatrix[i][pivot[1]])).negate();
 
             for(int j = 0; j < inMatrix[i].length; j++){
 
-                //inMatrix[i][j] = simplifyDouble(BigDecimal.valueOf(inMatrix[i][j]).add(factor.multiply(BigDecimal.valueOf(inMatrix[pivot[0]][j]))).doubleValue()).doubleValue();
                 BigDecimal factor2 = simplifyStringToBigDecimal((factor.multiply(new BigDecimal(inMatrix[pivot[0]][j]))).toString());
-                //double factor2 = simplifyDouble(factor * inMatrix[pivot[0]][j]).doubleValue();
                 inMatrix[i][j] = simplifyStringToBigDecimal(((new BigDecimal(inMatrix[i][j])).add(factor2)).toString()).toString();
-                //inMatrix[i][j] = simplifyDouble(inMatrix[i][j] + factor2).doubleValue();
 
             }
 
         }
 
-    }
-
-    public static BigDecimal upperPriceLimit(double[][] inMatrix, int res_pos, double[] var_prices){
-
-        BigDecimal return_price = new BigDecimal(0);
-
-        for(int i = 1; i < inMatrix.length; i++){
-
-            for(int j = 0; j < var_prices.length; j++){
-
-                if(inMatrix[i][j] == 1.0){
-
-                    return_price = return_price.add(BigDecimal.valueOf(inMatrix[i][res_pos]).multiply(BigDecimal.valueOf(var_prices[j])));
-
-                }
-                
-            }
-
-        }
-
-        return return_price;
     }
 
 }
