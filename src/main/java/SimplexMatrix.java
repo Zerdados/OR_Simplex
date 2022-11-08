@@ -6,6 +6,12 @@ public class SimplexMatrix {
     private int res;
     private GuiProgram gui;
 
+    /**
+     * Creates a SimplexMatrix with an amount of variables and restrictions, the values as a String-Matrix, and a GUI
+     * @param var amount of variables
+     * @param res amount of restrictions
+     * @param gui GUI
+     */
     public SimplexMatrix(int var, int res, GuiProgram gui) {
 
         matrix_data = new String[res + 1][var + res + 1];
@@ -19,12 +25,18 @@ public class SimplexMatrix {
 
     }
 
+    /**
+     * Calls method in gui to print the matrix_data.
+     */
     public void printMatrix(){
 
         gui.printStringMatrix(matrix_data);
 
     }
 
+    /**
+     * Takes values from textFields in gui and saves them in matrix_data.
+     */
     public void inputData(){
 
         String input;
@@ -56,6 +68,9 @@ public class SimplexMatrix {
         }
     }
 
+    /**
+     * Solves the matrix by calling simplexIteration until the matrix is solved, signified by a 1 being returned.
+     */
     public void solve(){
 
         int out = 0;
@@ -70,7 +85,6 @@ public class SimplexMatrix {
             this.printMatrix();
 
         }
-        //gui.printStringMatrix(matrix_data);
 
     }
 }

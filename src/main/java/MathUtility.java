@@ -3,7 +3,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 public class MathUtility {
-    
+
     private static DecimalFormat df = new DecimalFormat("0.###E0");
 
     /**
