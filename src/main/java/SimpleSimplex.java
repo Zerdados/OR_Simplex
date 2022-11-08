@@ -9,13 +9,16 @@ public class SimpleSimplex {
     public static int res = 3;
     public static GuiProgram simplex_gui;
 
+    /**
+     * Initializes a GuiProgram, a double-matrix and a simplexMatrix. <br>
+     * Also adds exit button functionality to the GuiProgram
+     * @param args does nothing
+     */
     public static void main(String args[]){
-
-        //Scanner scanner = new Scanner(System.in);
 
         simplex_gui = new GuiProgram(var,res);
 
-        simplexMatrix = new double[res + 1][var + res + 1]; //TODO: Change to BigDecimal Matrix
+        simplexMatrix = new double[res + 1][var + res + 1];
 
         matrix = new SimplexMatrix(var, res, simplex_gui);
 
@@ -29,59 +32,56 @@ public class SimpleSimplex {
 
     }
 
+    /**
+     * Inputs data from the GUI into the matrix's, then solves the simplex matrix's and prints them onto the GUI and
+     * into the console.
+     */
     public static void simplex(){
 
         String input;
-
         matrix.inputData();
 
         for(int i = 0; i < simplexMatrix.length; i++){
 
             for(int j = 0; j < var; j++){
 
-                System.out.println("Input number at [" + i + "][" + j + "]:");
-                //input = scanner.nextLine();
                 input = simplex_gui.functions[i+1].textFields[j].getText();
                 simplexMatrix[i][j] = MathUtility.simplifyDouble(Double.parseDouble(input)).doubleValue();
-
-
 
             }
 
             for(int j = var; j < (var + res); j++){
-
 
                 simplexMatrix[i][j] = 0;
 
             }
 
             if(i > 0) {
-                System.out.println("Input number at [" + i + "][" + (var + res) + "]:");
-                //input = scanner.nextLine();
+
                 input = simplex_gui.functions[i+1].textFields[var].getText();
                 simplexMatrix[i][var + res] = MathUtility.simplifyDouble(Double.parseDouble(input)).doubleValue();
                 simplexMatrix[i][var + i - 1] = 1.0;
+
             }
 
         }
 
         matrix.solve();
         printMatrix();
-        //simplex_gui.printMatrix(simplexMatrix);
         MathUtility.simplexIteration(simplexMatrix);
         System.out.println();
         printMatrix();
-        //simplex_gui.printMatrix(simplexMatrix);
         MathUtility.simplexIteration(simplexMatrix);
         System.out.println();
         printMatrix();
-        //simplex_gui.printMatrix(simplexMatrix);
-        //matrix.printMatrix();
         simplex_gui.setSize(500,700);
         simplex_gui.setVisible(true);
 
     }
 
+    /**
+     * Prints simplexMatrix into the console
+     */
     public static void printMatrix(){
 
         for(int i = 0; i < simplexMatrix.length; i++){
@@ -96,7 +96,5 @@ public class SimpleSimplex {
         }
 
     }
-
-
 
 }
