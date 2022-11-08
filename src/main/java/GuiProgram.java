@@ -5,24 +5,23 @@ import java.awt.event.ActionListener;
 
 public class GuiProgram extends Frame {
 
-    public Label[] rows;
     public GuiFunctionRow[] functions;
-    public boolean running = true;
     private int res;
     private int var;
     private int pos;
     GridBagConstraints c = new GridBagConstraints();
 
+    /**
+     * Constructor for a GuiProgram to solve a linear optimization problem. <br>
+     * Initially only displays a function with one variable and one restriction. <br>
+     * Later versions should add functionality to add additional variables and restrictions during runtime.
+     */
     public GuiProgram(){
         setLayout(new GridBagLayout());
         functions = new GuiFunctionRow[8];
         functions[0] = new GuiFunctionRow(0, 0);
         functions[1] = new GuiFunctionRow(100, 1);
-        //functions[2] = new GuiFunctionRow(200, 1, 1);
         functions[2] = new GuiFunctionRow(200, 3);
-
-        //add(functions[0]);
-        //add(functions[1]);
 
         addFunctionRows();
 
@@ -30,6 +29,14 @@ public class GuiProgram extends Frame {
         setVisible(true);
 
     }
+
+    /**
+     * Constructor for a GuiProgram to solve a linear optimization problem. <br>
+     * Sets the amount of functions needed based on the amount of variables and restrictions. <br>
+     * Automatically displays functions.
+     * @param var amount of variables
+     * @param res amount of restrictions
+     */
     public GuiProgram(int var, int res){
         setLayout(new GridBagLayout());
         functions = new GuiFunctionRow[res + 2];
@@ -39,12 +46,6 @@ public class GuiProgram extends Frame {
             functions[i] = new GuiFunctionRow(i*100, var, i-1, 2);
         }
         pos = 100*res + 100;
-        //c.gridy = pos;
-        //functions[2] = new GuiFunctionRow(200, 1, 1);
-        //functions[2] = new GuiFunctionRow(200, 3);
-
-        //add(functions[0]);
-        //add(functions[1]);
 
         addFunctionRows();
 
@@ -53,24 +54,30 @@ public class GuiProgram extends Frame {
 
     }
 
+    /**
+     * Displays a double-matrix in the GUI.
+     * @param inMatrix double-matrix to be displayed
+     */
     public void printMatrix(double[][] inMatrix){
 
         c.gridy = pos;
         add(new Label(""), c);
-        //System.out.print(" ");
         pos = pos+100;
         for(int i = 0; i < inMatrix.length; i++){
             c.gridy = pos;
             pos = pos+100;
             for(int j = 0; j < inMatrix[i].length; j++){
                 add(new Label(String.valueOf(inMatrix[i][j])), c);
-               // System.out.print("A");
             }
 
         }
 
     }
 
+    /**
+     * Displays a String-Matrix in the GUI.
+     * @param inMatrix String-Matrix to be displayed
+     */
     public void printStringMatrix(String[][] inMatrix){
         c.gridy = pos;
         add(new Label(""), c);
@@ -84,13 +91,10 @@ public class GuiProgram extends Frame {
         }
     }
 
-    public GuiProgram(int lbl_amount){
-        setLayout(new FlowLayout());
-        rows = new Label[lbl_amount];
-        setSize(300, 100);
-        setVisible(true);
-    }
-
+    /**
+     * Adds all GuiFunctionRows to the currently displayed GUI.
+     * Chooses specific method for display using a switch statement
+     */
     public void addFunctionRows(){
         for(GuiFunctionRow f : functions){
             switch(f.type){
@@ -110,6 +114,10 @@ public class GuiProgram extends Frame {
         }
     }
 
+    /**
+     * Adds a restriction to the currently displayed GUI
+     * @param f GuiFunctionRow to be displayed
+     */
     private void showRestriction(GuiFunctionRow f){
         add(f.labels[0], f.c);
         for(int i = 0; i < f.textFields.length - 1; i++){
@@ -120,6 +128,10 @@ public class GuiProgram extends Frame {
         add(f.textFields[f.textFields.length - 1], f.c);
     }
 
+    /**
+     * Adds max function to the currently displayed GUI
+     * @param f GuiFunctionRow to be displayed
+     */
     private void showMaxFunction(GuiFunctionRow f){
         add(f.labels[0], f.c);
         for(int i = 0; i < f.textFields.length; i++){
@@ -131,11 +143,19 @@ public class GuiProgram extends Frame {
         }
     }
 
+    /**
+     * This method was supposed to add an additional restriction.
+     * It is currently not usable
+     */
     private void addRes(){
         functions[2 + res] = new GuiFunctionRow(200 + res*100, var, res+1, 2);
         res++;
     }
 
+    /**
+     * This method was supposed to add an additional variable to all functions in the GUI
+     * It is currently not usable
+     */
     private void addVar(){
         var++;
         for(GuiFunctionRow f : functions){
@@ -145,23 +165,9 @@ public class GuiProgram extends Frame {
         }
     }
 
-    private void addRes(int amount){
-
-        Label[] temp = new Label[rows.length];
-        for(int i = 0; i < rows.length; i++){
-
-            temp[i] = rows[i];
-
-        }
-        rows = new Label[temp.length + amount];
-        for(int i = 0; i < temp.length; i++){
-
-            rows[i] = temp[i];
-
-        }
-
-    }
-
+    /**
+     * Whenever this event is called, the simplex method in SimpleSimplex is called
+     */
     private class BtnCalculateListener implements ActionListener{
 
         GuiProgram gui;
@@ -172,7 +178,6 @@ public class GuiProgram extends Frame {
         @Override
         public void actionPerformed(ActionEvent e) {
             SimpleSimplex.simplex();
-            //System.out.println("Button Press");
         }
     }
 
