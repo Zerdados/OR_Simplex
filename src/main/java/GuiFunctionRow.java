@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.awt.*;
 
 public class GuiFunctionRow{
@@ -10,6 +9,12 @@ public class GuiFunctionRow{
     private int pos;
     GridBagConstraints c = new GridBagConstraints();
 
+    /**
+     * Creates a new GuiFunctionRow of one of 3 types: Calculate Button, Function or Restriction. <br>
+     * Could be modified to support variable amounts of restrictions and variables
+     * @param pos position of object in GUI
+     * @param p type of object (<br>0 = Calculate Button, <br>1 = Function, <br>2 = Restriction)
+     */
     public GuiFunctionRow(int pos, int p){
         switch(p){
             case 0:
@@ -40,6 +45,14 @@ public class GuiFunctionRow{
         }
     }
 
+    /**
+     * Constructor for a GuiFunctionRow with a given amount of restrictions and variables. <br>
+     * Can construct either a Function or a Restriction
+     * @param pos position of object in GUI
+     * @param v amount of variables
+     * @param r amount of restrictions
+     * @param par type of object ( <br>1 = Function,<br>2 = Restriction)
+     */
     public GuiFunctionRow(int pos, int v, int r, int par){
         c.gridy = pos;
         switch (par){
@@ -69,6 +82,12 @@ public class GuiFunctionRow{
 
     }
 
+    /**
+     * DO NOT USE! <br>
+     * Adds additional variable field to a restriction.
+     * Not fully implemented yet.
+     * @param v amount of variables to be added
+     */
     public void GuiResAddVar(int v){
         addLabel();
         addTextField();
@@ -78,6 +97,11 @@ public class GuiFunctionRow{
         //textFields
     }
 
+    /**
+     * DO NOT USE! <br>
+     * Adds additional variable field to a function.
+     * Not fully implemented yet.
+     */
     public void GuiFunAddVar(){
         addLabel();
         addTextField();
@@ -85,6 +109,9 @@ public class GuiFunctionRow{
         textFields[textFields.length-1] = new TextField("", 5);
     }
 
+    /**
+     * Increases size of labels by 1
+     */
     private void addLabel(){
         Label[] temp = new Label[labels.length];
         for(int i = 0; i < labels.length; i++){
@@ -96,6 +123,9 @@ public class GuiFunctionRow{
         }
     }
 
+    /**
+     * Increases size of textFields by 1
+     */
     private void addTextField(){
         TextField[] temp = new TextField[buttons.length];
         for(int i = 0; i < textFields.length; i++){
