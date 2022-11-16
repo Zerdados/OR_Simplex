@@ -115,6 +115,42 @@ public class MathUtility {
 
     }
 
+
+    public static int[] calculateDualPivot(String[][] inMatrix) {
+
+        BigDecimal temp = new BigDecimal(0);
+        int[] pivot = new int[] {-1, 0};
+
+        for(int i = 0; i < inMatrix.length; i++){
+
+            BigDecimal bd = new BigDecimal(inMatrix[i][inMatrix[i].length-1]);
+
+            if(bd.doubleValue() < temp.doubleValue()){
+                temp = new BigDecimal(bd.doubleValue());
+                pivot[0] = i;
+            }
+        }
+        if(temp.doubleValue() == 0.0){
+            return pivot;
+        }
+
+        temp = new BigDecimal(0);
+
+        for(int i = 0; i < inMatrix[pivot[0]].length; i++){
+
+            BigDecimal bd = new BigDecimal(inMatrix[0][i]);
+            bd = bd.negate();
+            bd = simplifyStringToBigDecimal(bd.divide(new BigDecimal(inMatrix[pivot[0]][i]), RoundingMode.HALF_EVEN).toString());
+            //Sets the current row as the new pivot row, if the value of the quotient is either bigger than temp or temp is 0, and if the quotient is negative
+            if((bd.doubleValue() > temp.doubleValue() || temp.doubleValue() == 0.0) && bd.doubleValue() < 0){
+                temp = new BigDecimal(bd.doubleValue());
+                pivot[1] = i;
+            }
+        }
+
+        return pivot;
+    }
+
     /**
      * Calculates the pivot element for a given simplex matrix using the most-negative strategy.
      * @param inMatrix simplex tableau as a double-matrix
@@ -145,6 +181,7 @@ public class MathUtility {
 
         for(int i = 1; i < inMatrix.length; i++){
 
+            //TODO Simplify the value before comparing
             double quot = inMatrix[i][inMatrix[i].length-1]/inMatrix[i][pivot_col];
 
             if(quot < temp || first_iteration){
