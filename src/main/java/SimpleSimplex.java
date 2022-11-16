@@ -68,10 +68,10 @@ public class SimpleSimplex {
 
         matrix.solveTest();
         printMatrix();
-        MathUtility.simplexIteration(simplexMatrix);
+        //MathUtility.simplexIteration(simplexMatrix);
         System.out.println();
         printMatrix();
-        MathUtility.simplexIteration(simplexMatrix);
+        //MathUtility.simplexIteration(simplexMatrix);
         System.out.println();
         printMatrix();
         simplex_gui.setSize(500,700);

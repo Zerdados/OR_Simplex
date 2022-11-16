@@ -107,7 +107,9 @@ public class MathUtility {
             //CODE FOR DUAL SIMPLEX HERE!
             System.out.println("Its a Dual Simplex! The Pivot element is " + dual_pivot[0] + "|" + dual_pivot[1]);
             rowNormalization(inMatrix, dual_pivot);
+            System.out.println("Rows normalized");
             columnNormalization(inMatrix, dual_pivot);
+            System.out.println("Columns normalized");
             return 2;
         } else if(dual_pivot[1] == -1){
             System.out.println("Something went wrong!");

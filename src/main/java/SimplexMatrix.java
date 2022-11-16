@@ -95,8 +95,8 @@ public class SimplexMatrix {
         this.printMatrix();
         MathUtility.simplexIteration(matrix_data);
         this.printMatrix();
-        MathUtility.simplexIteration(matrix_data);
-        this.printMatrix();
-        MathUtility.simplexIteration(matrix_data);
+        //MathUtility.simplexIteration(matrix_data);
+        //this.printMatrix();
+        //MathUtility.simplexIteration(matrix_data);
     }
 }
