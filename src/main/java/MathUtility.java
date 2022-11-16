@@ -102,6 +102,12 @@ public class MathUtility {
      */
     public static int simplexIteration(String[][] inMatrix) {
 
+        int[] dual_pivot = calculateDualPivot(inMatrix);
+        if(dual_pivot[0] != -1){
+            //CODE FOR DUAL SIMPLEX HERE!
+            System.out.println("Its a Dual Simplex! The Pivot element is " + dual_pivot[0] + "|" + dual_pivot[1]);
+            return 2;
+        }
         int[] pivot = calculatePivot(inMatrix);
 
         System.out.println(pivot[1]);
@@ -116,7 +122,12 @@ public class MathUtility {
     }
 
 
-    public static int[] calculateDualPivot(String[][] inMatrix) {
+    /**
+     * Calculates the pivot element of a dual simplex tableau using two for loops, one for the row and another for the column. <br>
+     * @param inMatrix Simplex Tableau
+     * @return Pivot element as an int-array. If no element if found, {-1, 0} is returned instead
+     */
+    private static int[] calculateDualPivot(String[][] inMatrix) {
 
         BigDecimal temp = new BigDecimal(0);
         int[] pivot = new int[] {-1, 0};
