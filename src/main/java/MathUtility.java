@@ -161,7 +161,7 @@ public class MathUtility {
             if(Double.parseDouble(inMatrix[pivot[0]][i]) == 0.0){
                 continue;
             }
-            bd = simplifyStringToBigDecimal(bd.divide(new BigDecimal(inMatrix[pivot[0]][i]), RoundingMode.HALF_EVEN).toString());
+            bd = simplifyStringToBigDecimal(bd.divide(new BigDecimal(inMatrix[pivot[0]][i]), 100, RoundingMode.HALF_EVEN).toString());
             //Sets the current row as the new pivot row, if the value of the quotient is either bigger than temp or temp is 0, and if the quotient is negative
             if((bd.doubleValue() > temp.doubleValue() || temp.doubleValue() == 0.0) && bd.doubleValue() < 0){
                 temp = new BigDecimal(bd.doubleValue());
@@ -298,7 +298,7 @@ public class MathUtility {
 
         for(int i = 0; i < inMatrix[pivot[0]].length; i++){
 
-            inMatrix[pivot[0]][i] = ((new BigDecimal(inMatrix[pivot[0]][i])).divide(pivotElement, RoundingMode.HALF_EVEN)).toString();
+            inMatrix[pivot[0]][i] = ((new BigDecimal(inMatrix[pivot[0]][i])).divide(pivotElement, 100, RoundingMode.HALF_EVEN)).toString();
             inMatrix[pivot[0]][i] = simplifyStringToBigDecimal(inMatrix[pivot[0]][i]).toString();
 
         }
