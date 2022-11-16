@@ -87,4 +87,13 @@ public class SimplexMatrix {
         }
 
     }
+
+    /**
+     * For Testing purposes only!
+     */
+    public void solveTest(){
+        this.printMatrix();
+
+        MathUtility.simplexIteration(matrix_data);
+    }
 }
