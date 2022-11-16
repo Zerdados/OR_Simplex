@@ -106,8 +106,14 @@ public class MathUtility {
         if(dual_pivot[0] != -1){
             //CODE FOR DUAL SIMPLEX HERE!
             System.out.println("Its a Dual Simplex! The Pivot element is " + dual_pivot[0] + "|" + dual_pivot[1]);
+            rowNormalization(inMatrix, dual_pivot);
+            columnNormalization(inMatrix, dual_pivot);
             return 2;
+        } else if(dual_pivot[1] == -1){
+            System.out.println("Something went wrong!");
+            return -1;
         }
+        System.out.println("Calculating Pivot");
         int[] pivot = calculatePivot(inMatrix);
 
         System.out.println(pivot[1]);
@@ -125,17 +131,18 @@ public class MathUtility {
     /**
      * Calculates the pivot element of a dual simplex tableau using two for loops, one for the row and another for the column. <br>
      * @param inMatrix Simplex Tableau
-     * @return Pivot element as an int-array. If no element if found, {-1, 0} is returned instead
+     * @return Pivot element as an int-array. If no element is found, {-1, 0} is returned instead
      */
     private static int[] calculateDualPivot(String[][] inMatrix) {
 
         BigDecimal temp = new BigDecimal(0);
-        int[] pivot = new int[] {-1, 0};
+        int[] pivot = new int[] {-1, -1};
 
         for(int i = 0; i < inMatrix.length; i++){
 
             BigDecimal bd = new BigDecimal(inMatrix[i][inMatrix[i].length-1]);
 
+            System.out.println(bd + "" + temp);
             if(bd.doubleValue() < temp.doubleValue()){
                 temp = new BigDecimal(bd.doubleValue());
                 pivot[0] = i;
@@ -151,6 +158,9 @@ public class MathUtility {
 
             BigDecimal bd = new BigDecimal(inMatrix[0][i]);
             bd = bd.negate();
+            if(Double.parseDouble(inMatrix[pivot[0]][i]) == 0.0){
+                continue;
+            }
             bd = simplifyStringToBigDecimal(bd.divide(new BigDecimal(inMatrix[pivot[0]][i]), RoundingMode.HALF_EVEN).toString());
             //Sets the current row as the new pivot row, if the value of the quotient is either bigger than temp or temp is 0, and if the quotient is negative
             if((bd.doubleValue() > temp.doubleValue() || temp.doubleValue() == 0.0) && bd.doubleValue() < 0){
@@ -282,11 +292,13 @@ public class MathUtility {
      * @param pivot position of the pivot-element as an int-array
      */
     private static void rowNormalization(String[][] inMatrix, int[] pivot){
+
         BigDecimal pivotElement = new BigDecimal(inMatrix[pivot[0]][pivot[1]]);
+        System.out.println(pivotElement);
 
         for(int i = 0; i < inMatrix[pivot[0]].length; i++){
 
-            inMatrix[pivot[0]][i] = String.valueOf(Double.parseDouble(inMatrix[pivot[0]][i])/pivotElement.doubleValue());
+            inMatrix[pivot[0]][i] = ((new BigDecimal(inMatrix[pivot[0]][i])).divide(pivotElement, RoundingMode.HALF_EVEN)).toString();
             inMatrix[pivot[0]][i] = simplifyStringToBigDecimal(inMatrix[pivot[0]][i]).toString();
 
         }

@@ -76,7 +76,7 @@ public class SimplexMatrix {
         int out = 0;
         this.printMatrix();
 
-        while(out == 0){
+        while(true){
 
             out = MathUtility.simplexIteration(matrix_data);
             if(out == 1){
@@ -93,7 +93,10 @@ public class SimplexMatrix {
      */
     public void solveTest(){
         this.printMatrix();
-
+        MathUtility.simplexIteration(matrix_data);
+        this.printMatrix();
+        MathUtility.simplexIteration(matrix_data);
+        this.printMatrix();
         MathUtility.simplexIteration(matrix_data);
     }
 }

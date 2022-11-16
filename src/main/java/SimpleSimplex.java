@@ -6,7 +6,7 @@ public class SimpleSimplex {
     public static double[][] simplexMatrix;
     public static SimplexMatrix matrix;
     public static int var = 3;
-    public static int res = 3;
+    public static int res = 4;
     public static GuiProgram simplex_gui;
 
     /**
@@ -66,7 +66,7 @@ public class SimpleSimplex {
 
         }
 
-        matrix.solve();
+        matrix.solveTest();
         printMatrix();
         MathUtility.simplexIteration(simplexMatrix);
         System.out.println();
