@@ -5,8 +5,8 @@ public class SimpleSimplex {
 
     public static double[][] simplexMatrix;
     public static SimplexMatrix matrix;
-    public static int var = 3;
-    public static int res = 4;
+    public static int var = 1;
+    public static int res = 1;
     public static GuiProgram simplex_gui;
 
     /**
@@ -39,7 +39,7 @@ public class SimpleSimplex {
     public static void simplex(){
 
         String input;
-        matrix.inputData();
+        matrix.inputData(1);
 
         for(int i = 0; i < simplexMatrix.length; i++){
 

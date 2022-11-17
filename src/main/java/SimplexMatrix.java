@@ -36,8 +36,9 @@ public class SimplexMatrix {
 
     /**
      * Takes values from textFields in gui and saves them in matrix_data.
+     * @param p signifies if input is taken literally or simplified
      */
-    public void inputData(){
+    public void inputData(int p){
 
         String input;
         matrix_data[0][var + res] = "0";
@@ -47,8 +48,14 @@ public class SimplexMatrix {
             for(int j = 0; j < var; j++){
 
                 input = gui.functions[i+1].textFields[j].getText();
-                matrix_data[i][j] = MathUtility.simplifyStringToBigDecimal(input).toString();
-
+                switch (p){
+                    case 1:
+                        matrix_data[i][j] = input;
+                        break;
+                    default:
+                        matrix_data[i][j] = MathUtility.simplifyStringToBigDecimal(input).toString();
+                        break;
+                }
             }
 
             for(int j = var; j < (var + res); j++){
@@ -61,7 +68,15 @@ public class SimplexMatrix {
             if(i > 0) {
 
                 input = gui.functions[i+1].textFields[var].getText();
-                matrix_data[i][var + res] = MathUtility.simplifyStringToBigDecimal(input).toString();
+                switch (p){
+                    case 1:
+                        matrix_data[i][var + res] = input;
+                        break;
+                    default:
+                        matrix_data[i][var + res] = MathUtility.simplifyStringToBigDecimal(input).toString();
+                        break;
+                }
+
                 matrix_data[i][var + i -1] = "1";
 
             }
