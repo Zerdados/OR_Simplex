@@ -124,7 +124,7 @@ public class MathUtility {
             return -1;
         }
         System.out.println("Calculating Pivot");
-        int[] pivot = calculatePivot(inMatrix);
+        int[] pivot = calculatePivot(inMatrix, p);
 
         System.out.println(pivot[1]);
         if(pivot[1] == -1){
@@ -265,7 +265,7 @@ public class MathUtility {
      * @param inMatrix simplex tableau as a String-Matrix
      * @return position of pivot element as int-array, {0, -1} if no element was found
      */
-    private static int[] calculatePivot(String[][] inMatrix){
+    private static int[] calculatePivot(String[][] inMatrix, int p){
 
         int pivot_col = 0;
         int pivot_row = 0;
@@ -274,7 +274,14 @@ public class MathUtility {
 
         for(int i = 0; i < inMatrix[0].length; i++){
 
-            double d = Double.parseDouble(inMatrix[0][i]);
+            double d;
+            switch (p){
+                case 1:
+                    d = Fraction.getFraction(inMatrix[0][i]).doubleValue();
+                    break;
+                default:
+                    d = Double.parseDouble(inMatrix[0][i]);
+            }
             if(d < temp){
                 temp = d;
                 pivot_col = i;
@@ -291,7 +298,16 @@ public class MathUtility {
 
         for(int i = 1; i < inMatrix.length; i++){
 
-            double quot = Double.parseDouble(inMatrix[i][inMatrix[i].length-1])/Double.parseDouble(inMatrix[i][pivot_col]);
+            double quot;
+
+            switch (p){
+                case 1:
+                    quot = Fraction.getFraction(inMatrix[i][inMatrix[i].length-1]).divideBy(Fraction.getFraction(inMatrix[i][pivot_col])).doubleValue();
+                    break;
+                default:
+                    quot = Double.parseDouble(inMatrix[i][inMatrix[i].length-1])/Double.parseDouble(inMatrix[i][pivot_col]);
+            }
+
 
             if(quot < temp || first_iteration){
 
