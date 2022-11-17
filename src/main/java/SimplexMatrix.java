@@ -79,7 +79,7 @@ public class SimplexMatrix {
         while(true){
 
             out = MathUtility.simplexIteration(matrix_data, p);
-            if(out == 1){
+            if(out == 1 || out == -1){
                 break;
             }
             this.printMatrix();

@@ -107,7 +107,7 @@ public class MathUtility {
 
         if(p == 1){
             System.out.println(f);
-            f.add(Fraction.getFraction(1, 4));
+            f = f.add(Fraction.getFraction(1, 4));
             System.out.println(f);
             return -1;
         }
