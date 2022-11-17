@@ -131,8 +131,8 @@ public class MathUtility {
             return 1;
         }
 
-        rowNormalization(inMatrix, pivot);
-        columnNormalization(inMatrix, pivot);
+        rowNormalization(inMatrix, pivot, p);
+        columnNormalization(inMatrix, pivot, p);
         return 0;
 
     }
@@ -346,16 +346,22 @@ public class MathUtility {
      * @param inMatrix simplex tableau as a String-Matrix
      * @param pivot position of the pivot-element as an int-array
      */
-    private static void rowNormalization(String[][] inMatrix, int[] pivot){
+    private static void rowNormalization(String[][] inMatrix, int[] pivot, int p){
 
         BigDecimal pivotElement = new BigDecimal(inMatrix[pivot[0]][pivot[1]]);
+        Fraction pivotFraction = Fraction.getFraction(inMatrix[pivot[0]][pivot[1]]);
         System.out.println(pivotElement);
 
         for(int i = 0; i < inMatrix[pivot[0]].length; i++){
 
-            inMatrix[pivot[0]][i] = ((new BigDecimal(inMatrix[pivot[0]][i])).divide(pivotElement, 100, RoundingMode.HALF_EVEN)).toString();
-            inMatrix[pivot[0]][i] = simplifyStringToBigDecimal(inMatrix[pivot[0]][i]).toString();
-
+            switch(p){
+                case 1:
+                    inMatrix[pivot[0]][i] = Fraction.getFraction(inMatrix[pivot[0]][i]).divideBy(pivotFraction).toString();
+                    break;
+                default:
+                    inMatrix[pivot[0]][i] = ((new BigDecimal(inMatrix[pivot[0]][i])).divide(pivotElement, 100, RoundingMode.HALF_EVEN)).toString();
+                    inMatrix[pivot[0]][i] = simplifyStringToBigDecimal(inMatrix[pivot[0]][i]).toString();
+            }
         }
     }
 
@@ -399,7 +405,7 @@ public class MathUtility {
      * @param inMatrix simplex tableau as a String-Matrix
      * @param pivot position of the pivot-element as an int-array
      */
-    private static void columnNormalization(String[][] inMatrix, int[] pivot){
+    private static void columnNormalization(String[][] inMatrix, int[] pivot, int p){
 
         for(int i = 0; i < inMatrix.length; i++){
 
@@ -408,12 +414,19 @@ public class MathUtility {
             }
 
             BigDecimal factor = (new BigDecimal(inMatrix[i][pivot[1]])).negate();
+            Fraction f_factor = Fraction.getFraction(inMatrix[i][pivot[1]]).negate();
 
             for(int j = 0; j < inMatrix[i].length; j++){
 
-                BigDecimal factor2 = simplifyStringToBigDecimal((factor.multiply(new BigDecimal(inMatrix[pivot[0]][j]))).toString());
-                inMatrix[i][j] = simplifyStringToBigDecimal(((new BigDecimal(inMatrix[i][j])).add(factor2)).toString()).toString();
-
+                switch (p){
+                    case 1:
+                        Fraction f_factor2 = f_factor.multiplyBy(Fraction.getFraction(inMatrix[pivot[0]][j]));
+                        inMatrix[i][j] = Fraction.getFraction(inMatrix[i][j]).add(f_factor2).toString();
+                        break;
+                    default:
+                        BigDecimal factor2 = simplifyStringToBigDecimal((factor.multiply(new BigDecimal(inMatrix[pivot[0]][j]))).toString());
+                        inMatrix[i][j] = simplifyStringToBigDecimal(((new BigDecimal(inMatrix[i][j])).add(factor2)).toString()).toString();
+                }
             }
 
         }
