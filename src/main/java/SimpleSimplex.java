@@ -66,7 +66,7 @@ public class SimpleSimplex {
 
         }
 
-        matrix.solveTest();
+        matrix.solve(1);
         printMatrix();
         //MathUtility.simplexIteration(simplexMatrix);
         System.out.println();

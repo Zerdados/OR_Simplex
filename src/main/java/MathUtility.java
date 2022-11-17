@@ -1,3 +1,5 @@
+import org.apache.commons.lang3.math.Fraction;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -5,6 +7,7 @@ import java.text.DecimalFormat;
 public class MathUtility {
 
     private static DecimalFormat df = new DecimalFormat("0.###E0");
+    private static Fraction f = Fraction.getFraction(1, 4);
 
     /**
      * Transforms a double value into a String with exponential notation and a matrissa length of 4. <br>
@@ -100,18 +103,23 @@ public class MathUtility {
      * @param inMatrix String-Matrix containing the simplex tableau to be iterated upon
      * @return 0 if iteration was successful, 1 if simplex tableau was already solved
      */
-    public static int simplexIteration(String[][] inMatrix) {
+    public static int simplexIteration(String[][] inMatrix, int p) {
 
+        if(p == 1){
+            System.out.println(f);
+            f.add(Fraction.getFraction(1, 4));
+            System.out.println(f);
+            return -1;
+        }
         int[] dual_pivot = calculateDualPivot(inMatrix);
         if(dual_pivot[0] != -1){
-            //CODE FOR DUAL SIMPLEX HERE!
             System.out.println("Its a Dual Simplex! The Pivot element is " + dual_pivot[0] + "|" + dual_pivot[1]);
             rowNormalization(inMatrix, dual_pivot);
             System.out.println("Rows normalized");
             columnNormalization(inMatrix, dual_pivot);
             System.out.println("Columns normalized");
             return 2;
-        } else if(dual_pivot[1] == -1){
+        } else if(dual_pivot[1] == -1 && dual_pivot[0] != -1){
             System.out.println("Something went wrong!");
             return -1;
         }
@@ -144,12 +152,13 @@ public class MathUtility {
 
             BigDecimal bd = new BigDecimal(inMatrix[i][inMatrix[i].length-1]);
 
-            System.out.println(bd + "" + temp);
+            System.out.println(bd + "|" + temp);
             if(bd.doubleValue() < temp.doubleValue()){
                 temp = new BigDecimal(bd.doubleValue());
                 pivot[0] = i;
             }
         }
+        System.out.println(temp.doubleValue());
         if(temp.doubleValue() == 0.0){
             return pivot;
         }

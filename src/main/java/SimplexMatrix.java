@@ -71,14 +71,14 @@ public class SimplexMatrix {
     /**
      * Solves the matrix by calling simplexIteration until the matrix is solved, signified by a 1 being returned.
      */
-    public void solve(){
+    public void solve(int p){
 
         int out = 0;
         this.printMatrix();
 
         while(true){
 
-            out = MathUtility.simplexIteration(matrix_data);
+            out = MathUtility.simplexIteration(matrix_data, p);
             if(out == 1){
                 break;
             }
@@ -91,9 +91,9 @@ public class SimplexMatrix {
     /**
      * For Testing purposes only!
      */
-    public void solveTest(){
+    public void solveTest(int p){
         this.printMatrix();
-        MathUtility.simplexIteration(matrix_data);
+        MathUtility.simplexIteration(matrix_data, p);
         this.printMatrix();
         //MathUtility.simplexIteration(matrix_data);
         //this.printMatrix();
