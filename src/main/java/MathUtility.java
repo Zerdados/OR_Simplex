@@ -107,11 +107,11 @@ public class MathUtility {
 
         if(p == 1){
             System.out.println(f);
-            f = f.add(Fraction.getFraction(1, 4));
+            f = f.add(Fraction.getFraction("1/4"));
             System.out.println(f);
             return -1;
         }
-        int[] dual_pivot = calculateDualPivot(inMatrix);
+        int[] dual_pivot = calculateDualPivot(inMatrix, p);
         if(dual_pivot[0] != -1){
             System.out.println("Its a Dual Simplex! The Pivot element is " + dual_pivot[0] + "|" + dual_pivot[1]);
             rowNormalization(inMatrix, dual_pivot);
@@ -143,41 +143,69 @@ public class MathUtility {
      * @param inMatrix Simplex Tableau
      * @return Pivot element as an int-array. If no element is found, {-1, 0} is returned instead
      */
-    private static int[] calculateDualPivot(String[][] inMatrix) {
+    private static int[] calculateDualPivot(String[][] inMatrix, int p) {
 
         BigDecimal temp = new BigDecimal(0);
+        Fraction temp_f = Fraction.getFraction(0);
         int[] pivot = new int[] {-1, -1};
 
         for(int i = 0; i < inMatrix.length; i++){
 
-            BigDecimal bd = new BigDecimal(inMatrix[i][inMatrix[i].length-1]);
-
-            System.out.println(bd + "|" + temp);
-            if(bd.doubleValue() < temp.doubleValue()){
-                temp = new BigDecimal(bd.doubleValue());
-                pivot[0] = i;
+            switch (p){
+                case 1:
+                    Fraction f = Fraction.getFraction(inMatrix[i][inMatrix[i].length-1]);
+                    if(f.compareTo(temp_f) == -1){
+                        temp_f = Fraction.getFraction(f.getNumerator(), f.getDenominator());
+                        pivot[0] = i;
+                    }
+                    break;
+                default:
+                    BigDecimal bd = new BigDecimal(inMatrix[i][inMatrix[i].length-1]);
+                    System.out.println(bd + "|" + temp);
+                    if(bd.doubleValue() < temp.doubleValue()){
+                        temp = new BigDecimal(bd.doubleValue());
+                        pivot[0] = i;
+                    }
             }
+
         }
-        System.out.println(temp.doubleValue());
-        if(temp.doubleValue() == 0.0){
+        //System.out.println(temp.doubleValue());
+        if(temp.doubleValue() == 0.0 && temp_f.doubleValue() == 0.0){
             return pivot;
         }
 
         temp = new BigDecimal(0);
+        temp_f = Fraction.getFraction(0);
 
         for(int i = 0; i < inMatrix[pivot[0]].length; i++){
 
-            BigDecimal bd = new BigDecimal(inMatrix[0][i]);
-            bd = bd.negate();
-            if(Double.parseDouble(inMatrix[pivot[0]][i]) == 0.0){
-                continue;
+            switch (p){
+                case 1:
+                    Fraction f = Fraction.getFraction(inMatrix[0][i]);
+                    f = f.negate();
+                    if(Fraction.getFraction(inMatrix[pivot[0]][i]).doubleValue() == 0.0){
+                        continue;
+                    }
+                    f = f.divideBy(Fraction.getFraction(inMatrix[pivot[0]][i]));
+                    if(((f.compareTo(temp_f) == 1) || temp_f.doubleValue() == 0.0) && (f.compareTo(Fraction.getFraction(0)) == -1)){
+                        temp_f = Fraction.getFraction(f.getNumerator(), f.getDenominator());
+                        pivot[1] = i;
+                    }
+                    break;
+                default:
+                    BigDecimal bd = new BigDecimal(inMatrix[0][i]);
+                    bd = bd.negate();
+                    if(Double.parseDouble(inMatrix[pivot[0]][i]) == 0.0){
+                        continue;
+                    }
+                    bd = simplifyStringToBigDecimal(bd.divide(new BigDecimal(inMatrix[pivot[0]][i]), 100, RoundingMode.HALF_EVEN).toString());
+                    //Sets the current row as the new pivot row, if the value of the quotient is either bigger than temp or temp is 0, and if the quotient is negative
+                    if((bd.doubleValue() > temp.doubleValue() || temp.doubleValue() == 0.0) && bd.doubleValue() < 0){
+                        temp = new BigDecimal(bd.doubleValue());
+                        pivot[1] = i;
+                    }
             }
-            bd = simplifyStringToBigDecimal(bd.divide(new BigDecimal(inMatrix[pivot[0]][i]), 100, RoundingMode.HALF_EVEN).toString());
-            //Sets the current row as the new pivot row, if the value of the quotient is either bigger than temp or temp is 0, and if the quotient is negative
-            if((bd.doubleValue() > temp.doubleValue() || temp.doubleValue() == 0.0) && bd.doubleValue() < 0){
-                temp = new BigDecimal(bd.doubleValue());
-                pivot[1] = i;
-            }
+
         }
 
         return pivot;
