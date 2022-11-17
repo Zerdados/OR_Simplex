@@ -114,9 +114,9 @@ public class MathUtility {
         int[] dual_pivot = calculateDualPivot(inMatrix, p);
         if(dual_pivot[0] != -1){
             System.out.println("Its a Dual Simplex! The Pivot element is " + dual_pivot[0] + "|" + dual_pivot[1]);
-            rowNormalization(inMatrix, dual_pivot);
+            rowNormalization(inMatrix, dual_pivot, p);
             System.out.println("Rows normalized");
-            columnNormalization(inMatrix, dual_pivot);
+            columnNormalization(inMatrix, dual_pivot, p);
             System.out.println("Columns normalized");
             return 2;
         } else if(dual_pivot[1] == -1 && dual_pivot[0] != -1){
