@@ -5,8 +5,8 @@ public class SimpleSimplex {
 
     public static double[][] simplexMatrix;
     public static SimplexMatrix matrix;
-    public static int var = 1;
-    public static int res = 1;
+    public static int var = 2;
+    public static int res = 2;
     public static GuiProgram simplex_gui;
 
     /**

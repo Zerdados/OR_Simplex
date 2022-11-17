@@ -105,7 +105,7 @@ public class MathUtility {
      */
     public static int simplexIteration(String[][] inMatrix, int p) {
 
-        if(p == 1){
+        if(p == 2){
             System.out.println(f);
             f = f.add(Fraction.getFraction("1/4"));
             System.out.println(f);
@@ -300,6 +300,10 @@ public class MathUtility {
 
             double quot;
 
+            if(Fraction.getFraction(inMatrix[i][pivot_col]).doubleValue() == 0.0){
+                continue;
+            }
+
             switch (p){
                 case 1:
                     quot = Fraction.getFraction(inMatrix[i][inMatrix[i].length-1]).divideBy(Fraction.getFraction(inMatrix[i][pivot_col])).doubleValue();
@@ -348,9 +352,11 @@ public class MathUtility {
      */
     private static void rowNormalization(String[][] inMatrix, int[] pivot, int p){
 
-        BigDecimal pivotElement = new BigDecimal(inMatrix[pivot[0]][pivot[1]]);
+        BigDecimal pivotElement = new BigDecimal(1);
+        if(p != 1) {
+            pivotElement = new BigDecimal(inMatrix[pivot[0]][pivot[1]]);
+        }
         Fraction pivotFraction = Fraction.getFraction(inMatrix[pivot[0]][pivot[1]]);
-        System.out.println(pivotElement);
 
         for(int i = 0; i < inMatrix[pivot[0]].length; i++){
 
@@ -413,7 +419,10 @@ public class MathUtility {
                 continue;
             }
 
-            BigDecimal factor = (new BigDecimal(inMatrix[i][pivot[1]])).negate();
+            BigDecimal factor = new BigDecimal(0);
+            if(p != 1){
+                factor = (new BigDecimal(inMatrix[i][pivot[1]])).negate();
+            }
             Fraction f_factor = Fraction.getFraction(inMatrix[i][pivot[1]]).negate();
 
             for(int j = 0; j < inMatrix[i].length; j++){
