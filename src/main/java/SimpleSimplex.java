@@ -5,8 +5,8 @@ public class SimpleSimplex {
 
     public static double[][] simplexMatrix;
     public static SimplexMatrix matrix;
-    public static int var = 2;
-    public static int res = 2;
+    public static int var = 3;
+    public static int res = 4;
     public static GuiProgram simplex_gui;
 
     /**
@@ -46,7 +46,7 @@ public class SimpleSimplex {
             for(int j = 0; j < var; j++){
 
                 input = simplex_gui.functions[i+1].textFields[j].getText();
-                simplexMatrix[i][j] = MathUtility.simplifyDouble(Double.parseDouble(input)).doubleValue();
+                //simplexMatrix[i][j] = MathUtility.simplifyDouble(Double.parseDouble(input)).doubleValue();
 
             }
 
@@ -59,14 +59,14 @@ public class SimpleSimplex {
             if(i > 0) {
 
                 input = simplex_gui.functions[i+1].textFields[var].getText();
-                simplexMatrix[i][var + res] = MathUtility.simplifyDouble(Double.parseDouble(input)).doubleValue();
+                //simplexMatrix[i][var + res] = MathUtility.simplifyDouble(Double.parseDouble(input)).doubleValue();
                 simplexMatrix[i][var + i - 1] = 1.0;
 
             }
 
         }
 
-        matrix.solve(1);
+        matrix.solveTest(1);
         printMatrix();
         //MathUtility.simplexIteration(simplexMatrix);
         System.out.println();

@@ -169,7 +169,7 @@ public class MathUtility {
             }
 
         }
-        //System.out.println(temp.doubleValue());
+        System.out.println(temp.doubleValue() + " " + temp_f.doubleValue());
         if(temp.doubleValue() == 0.0 && temp_f.doubleValue() == 0.0){
             return pivot;
         }
