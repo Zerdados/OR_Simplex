@@ -7,7 +7,7 @@ import java.text.DecimalFormat;
 
 public class MathUtility {
 
-    private static DecimalFormat df = new DecimalFormat("0.###E0");
+    private static final DecimalFormat df = new DecimalFormat("0.###E0");
     private static BigFraction bf = BigFraction.of(1,4);
 
     /**
@@ -33,7 +33,7 @@ public class MathUtility {
     private static String stringToFourMatrissa(String in){
 
         df.setRoundingMode(RoundingMode.HALF_EVEN);
-        return df.format(BigDecimal.valueOf(Double.valueOf(in)));
+        return df.format(BigDecimal.valueOf(Double.parseDouble(in)));
 
     }
 
@@ -73,27 +73,6 @@ public class MathUtility {
     public static BigDecimal simplifyStringToBigDecimal(String in){
 
         return fourMatrissaToBigDecimal(stringToFourMatrissa(in));
-
-    }
-
-    /**
-     * Calculates one simplex iteration in a double matrix, saves result in same matrix. <br>
-     * Detailed calculation consists of: Finding the pivot element, normalizing the pivot-row,
-     * then normalizing all remaining rows.
-     * @param inMatrix double-matrix containing the simplex tableau to be iterated upon
-     * @return 0 if iteration was successful, 1 if simplex tableau was already solved
-     */
-    public static int simplexIteration(double[][] inMatrix) {
-
-        int[] pivot = calculatePivot(inMatrix);
-
-        if(pivot[1] == -1){
-            return 1;
-        }
-
-        rowNormalization(inMatrix, pivot);
-        columnNormalization(inMatrix, pivot);
-        return 0;
 
     }
 
@@ -157,7 +136,7 @@ public class MathUtility {
                 case 1:
                     //Fraction f = Fraction.getFraction(inMatrix[i][inMatrix[i].length-1]);
                     BigFraction bf = BigFraction.parse(inMatrix[i][inMatrix[i].length-1]);
-                    if(bf.compareTo(temp_f) == -1){
+                    if(bf.compareTo(temp_f) < 0){
                         temp_f = BigFraction.of(bf.getNumerator(), bf.getDenominator());
                         pivot[0] = i;
                     }
@@ -166,7 +145,7 @@ public class MathUtility {
                     BigDecimal bd = new BigDecimal(inMatrix[i][inMatrix[i].length-1]);
                     System.out.println(bd + "|" + temp);
                     if(bd.doubleValue() < temp.doubleValue()){
-                        temp = new BigDecimal(bd.doubleValue());
+                        temp = BigDecimal.valueOf(bd.doubleValue());
                         pivot[0] = i;
                     }
             }
@@ -192,7 +171,7 @@ public class MathUtility {
                         continue;
                     }
                     bf = bf.divide(BigFraction.parse(inMatrix[pivot[0]][i]));
-                    if(((bf.compareTo(temp_f) == 1) || temp_f.doubleValue() == 0.0) && (bf.compareTo(BigFraction.of(0)) == -1)){
+                    if(((bf.compareTo(temp_f) > 0) || temp_f.doubleValue() == 0.0) && (bf.compareTo(BigFraction.of(0)) < 0)){
                         temp_f = BigFraction.of(bf.getNumerator(), bf.getDenominator());
                         pivot[1] = i;
                     }
@@ -206,7 +185,7 @@ public class MathUtility {
                     bd = simplifyStringToBigDecimal(bd.divide(new BigDecimal(inMatrix[pivot[0]][i]), 100, RoundingMode.HALF_EVEN).toString());
                     //Sets the current row as the new pivot row, if the value of the quotient is either bigger than temp or temp is 0, and if the quotient is negative
                     if((bd.doubleValue() > temp.doubleValue() || temp.doubleValue() == 0.0) && bd.doubleValue() < 0){
-                        temp = new BigDecimal(bd.doubleValue());
+                        temp = BigDecimal.valueOf(bd.doubleValue());
                         pivot[1] = i;
                     }
             }
@@ -238,8 +217,7 @@ public class MathUtility {
         }
 
         if(temp == 0) {
-            int[] arr = {0, -1};
-            return arr;
+            return new int[]{0, -1};
         }
 
         temp = 0;
@@ -259,8 +237,7 @@ public class MathUtility {
 
         }
 
-        int[] arr = {pivot_row, pivot_col};
-        return arr;
+        return new int[]{pivot_row, pivot_col};
 
     }
 
@@ -295,8 +272,7 @@ public class MathUtility {
         }
 
         if(temp == 0) {
-            int[] arr = {0, -1};
-            return arr;
+            return new int[]{0, -1};
         }
 
         temp = 0;
@@ -328,25 +304,7 @@ public class MathUtility {
 
         }
 
-        int[] arr = {pivot_row, pivot_col};
-        return arr;
-
-    }
-
-    /**
-     * Normalizes the pivot-row in a simplex tableau. Every element in the row is divided by the pivot-element.
-     * @param inMatrix simplex tableau as a double-matrix
-     * @param pivot position of the pivot-element as an int-array
-     */
-    private static void rowNormalization(double[][] inMatrix, int[] pivot){
-
-        double pivotElement = inMatrix[pivot[0]][pivot[1]];
-
-        for(int i = 0; i < inMatrix[pivot[0]].length; i++){
-
-            inMatrix[pivot[0]][i] = simplifyDouble(inMatrix[pivot[0]][i]/pivotElement).doubleValue();
-
-        }
+        return new int[]{pivot_row, pivot_col};
 
     }
 
@@ -375,36 +333,6 @@ public class MathUtility {
                     inMatrix[pivot[0]][i] = simplifyStringToBigDecimal(inMatrix[pivot[0]][i]).toString();
             }
         }
-    }
-
-    /**
-     * Normalizes the pivot-column in a simplex tableau. For every row except the pivot-row, a factor is calculated by
-     * multiplying the element that is in that row and the pivot-column with -1.<br>
-     * Then, every element of that row gets that factor multiplied with the element in the same column and pivot-row
-     * added to it.<br>
-     * The result should have every element in the pivot-column except the pivot element as 0.
-     * @param inMatrix simplex tableau as a double-matrix
-     * @param pivot position of the pivot-element as an int-array
-     */
-    private static void columnNormalization(double[][] inMatrix, int[] pivot){
-
-        for(int i = 0; i < inMatrix.length; i++){
-
-            if(i == pivot[0]){
-                continue;
-            }
-
-            double factor = inMatrix[i][pivot[1]] * -1.0;
-
-            for(int j = 0; j < inMatrix[i].length; j++){
-
-                double factor2 = simplifyDouble(factor * inMatrix[pivot[0]][j]).doubleValue();
-                inMatrix[i][j] = simplifyDouble(inMatrix[i][j] + factor2).doubleValue();
-
-            }
-
-        }
-
     }
 
     /**

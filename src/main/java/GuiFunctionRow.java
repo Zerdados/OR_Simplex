@@ -6,7 +6,6 @@ public class GuiFunctionRow{
     public Button[] buttons;
     public TextField[] textFields;
     public int type;
-    private int pos;
     GridBagConstraints c = new GridBagConstraints();
 
     /**

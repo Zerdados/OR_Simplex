@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -51,26 +50,6 @@ public class GuiProgram extends Frame {
 
         setSize(400, 200);
         setVisible(true);
-
-    }
-
-    /**
-     * Displays a double-matrix in the GUI.
-     * @param inMatrix double-matrix to be displayed
-     */
-    public void printMatrix(double[][] inMatrix){
-
-        c.gridy = pos;
-        add(new Label(""), c);
-        pos = pos+100;
-        for(int i = 0; i < inMatrix.length; i++){
-            c.gridy = pos;
-            pos = pos+100;
-            for(int j = 0; j < inMatrix[i].length; j++){
-                add(new Label(String.valueOf(inMatrix[i][j])), c);
-            }
-
-        }
 
     }
 
@@ -160,7 +139,7 @@ public class GuiProgram extends Frame {
         var++;
         for(GuiFunctionRow f : functions){
             if(f.type == 1 || f.type == 2){
-
+                System.out.println();
             }
         }
     }
@@ -168,7 +147,7 @@ public class GuiProgram extends Frame {
     /**
      * Whenever this event is called, the simplex method in SimpleSimplex is called
      */
-    private class BtnCalculateListener implements ActionListener{
+    private static class BtnCalculateListener implements ActionListener{
 
         GuiProgram gui;
         public BtnCalculateListener(GuiProgram g){

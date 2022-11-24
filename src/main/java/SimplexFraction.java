@@ -5,7 +5,7 @@ import java.math.BigInteger;
 public class SimplexFraction {
 
     public static String fractionToString(BigFraction bf){
-        String output = "";
+        String output;
         if(bf.getNumerator().signum() == 0){
             return "0";
         }
