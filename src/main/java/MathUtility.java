@@ -1,4 +1,5 @@
-import org.apache.commons.lang3.math.Fraction;
+//import org.apache.commons.lang3.math.Fraction;
+import org.apache.commons.numbers.fraction.BigFraction;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -7,7 +8,7 @@ import java.text.DecimalFormat;
 public class MathUtility {
 
     private static DecimalFormat df = new DecimalFormat("0.###E0");
-    private static Fraction f = Fraction.getFraction(1, 4);
+    private static BigFraction bf = BigFraction.of(1,4);
 
     /**
      * Transforms a double value into a String with exponential notation and a matrissa length of 4. <br>
@@ -106,9 +107,9 @@ public class MathUtility {
     public static int simplexIteration(String[][] inMatrix, int p) {
 
         if(p == 2){
-            System.out.println(f);
-            f = f.add(Fraction.getFraction("1/4"));
-            System.out.println(f);
+            System.out.println(bf);
+            bf = bf.divide(4);
+            System.out.println(bf);
             return -1;
         }
         int[] dual_pivot = calculateDualPivot(inMatrix, p);
@@ -146,16 +147,18 @@ public class MathUtility {
     private static int[] calculateDualPivot(String[][] inMatrix, int p) {
 
         BigDecimal temp = new BigDecimal(0);
-        Fraction temp_f = Fraction.getFraction(0);
+        //Fraction temp_f = Fraction.getFraction(0);
+        BigFraction temp_f = BigFraction.of(0);
         int[] pivot = new int[] {-1, -1};
 
         for(int i = 0; i < inMatrix.length; i++){
 
             switch (p){
                 case 1:
-                    Fraction f = Fraction.getFraction(inMatrix[i][inMatrix[i].length-1]);
-                    if(f.compareTo(temp_f) == -1){
-                        temp_f = Fraction.getFraction(f.getNumerator(), f.getDenominator());
+                    //Fraction f = Fraction.getFraction(inMatrix[i][inMatrix[i].length-1]);
+                    BigFraction bf = BigFraction.parse(inMatrix[i][inMatrix[i].length-1]);
+                    if(bf.compareTo(temp_f) == -1){
+                        temp_f = BigFraction.of(bf.getNumerator(), bf.getDenominator());
                         pivot[0] = i;
                     }
                     break;
@@ -175,20 +178,22 @@ public class MathUtility {
         }
 
         temp = new BigDecimal(0);
-        temp_f = Fraction.getFraction(0);
+        temp_f = BigFraction.of(0);
 
         for(int i = 0; i < inMatrix[pivot[0]].length; i++){
 
             switch (p){
                 case 1:
-                    Fraction f = Fraction.getFraction(inMatrix[0][i]);
-                    f = f.negate();
-                    if(Fraction.getFraction(inMatrix[pivot[0]][i]).doubleValue() == 0.0){
+                    BigFraction bf = BigFraction.parse(inMatrix[0][i]);
+                    //Fraction f = Fraction.getFraction(inMatrix[0][i]);
+                    bf = bf.negate();
+                    //f = f.negate();
+                    if(BigFraction.parse(inMatrix[pivot[0]][i]).doubleValue() == 0.0){
                         continue;
                     }
-                    f = f.divideBy(Fraction.getFraction(inMatrix[pivot[0]][i]));
-                    if(((f.compareTo(temp_f) == 1) || temp_f.doubleValue() == 0.0) && (f.compareTo(Fraction.getFraction(0)) == -1)){
-                        temp_f = Fraction.getFraction(f.getNumerator(), f.getDenominator());
+                    bf = bf.divide(BigFraction.parse(inMatrix[pivot[0]][i]));
+                    if(((bf.compareTo(temp_f) == 1) || temp_f.doubleValue() == 0.0) && (bf.compareTo(BigFraction.of(0)) == -1)){
+                        temp_f = BigFraction.of(bf.getNumerator(), bf.getDenominator());
                         pivot[1] = i;
                     }
                     break;
@@ -277,7 +282,7 @@ public class MathUtility {
             double d;
             switch (p){
                 case 1:
-                    d = Fraction.getFraction(inMatrix[0][i]).doubleValue();
+                    d = BigFraction.parse(inMatrix[0][i]).doubleValue();
                     break;
                 default:
                     d = Double.parseDouble(inMatrix[0][i]);
@@ -300,20 +305,20 @@ public class MathUtility {
 
             double quot;
 
-            if(Fraction.getFraction(inMatrix[i][pivot_col]).doubleValue() == 0.0){
+            if(BigFraction.parse(inMatrix[i][pivot_col]).doubleValue() == 0.0){
                 continue;
             }
 
             switch (p){
                 case 1:
-                    quot = Fraction.getFraction(inMatrix[i][inMatrix[i].length-1]).divideBy(Fraction.getFraction(inMatrix[i][pivot_col])).doubleValue();
+                    quot = BigFraction.parse(inMatrix[i][inMatrix[i].length-1]).divide(BigFraction.parse(inMatrix[i][pivot_col])).doubleValue();
                     break;
                 default:
                     quot = Double.parseDouble(inMatrix[i][inMatrix[i].length-1])/Double.parseDouble(inMatrix[i][pivot_col]);
             }
 
 
-            if(quot < temp || first_iteration){
+            if((quot < temp || first_iteration) && quot > 0){
 
                 temp = quot;
                 pivot_row = i;
@@ -356,13 +361,13 @@ public class MathUtility {
         if(p != 1) {
             pivotElement = new BigDecimal(inMatrix[pivot[0]][pivot[1]]);
         }
-        Fraction pivotFraction = Fraction.getFraction(inMatrix[pivot[0]][pivot[1]]);
+        BigFraction pivotFraction = BigFraction.parse(inMatrix[pivot[0]][pivot[1]]);
 
         for(int i = 0; i < inMatrix[pivot[0]].length; i++){
 
             switch(p){
                 case 1:
-                    inMatrix[pivot[0]][i] = Fraction.getFraction(inMatrix[pivot[0]][i]).divideBy(pivotFraction).toString();
+                    inMatrix[pivot[0]][i] = BigFraction.parse(inMatrix[pivot[0]][i]).divide(pivotFraction).toString();
                     break;
                 default:
                     inMatrix[pivot[0]][i] = ((new BigDecimal(inMatrix[pivot[0]][i])).divide(pivotElement, 100, RoundingMode.HALF_EVEN)).toString();
@@ -423,14 +428,14 @@ public class MathUtility {
             if(p != 1){
                 factor = (new BigDecimal(inMatrix[i][pivot[1]])).negate();
             }
-            Fraction f_factor = Fraction.getFraction(inMatrix[i][pivot[1]]).negate();
+            BigFraction f_factor = BigFraction.parse(inMatrix[i][pivot[1]]).negate();
 
             for(int j = 0; j < inMatrix[i].length; j++){
 
                 switch (p){
                     case 1:
-                        Fraction f_factor2 = f_factor.multiplyBy(Fraction.getFraction(inMatrix[pivot[0]][j]));
-                        inMatrix[i][j] = Fraction.getFraction(inMatrix[i][j]).add(f_factor2).toString();
+                        BigFraction f_factor2 = f_factor.multiply(BigFraction.parse(inMatrix[pivot[0]][j]));
+                        inMatrix[i][j] = BigFraction.parse(inMatrix[i][j]).add(f_factor2).toString();
                         break;
                     default:
                         BigDecimal factor2 = simplifyStringToBigDecimal((factor.multiply(new BigDecimal(inMatrix[pivot[0]][j]))).toString());

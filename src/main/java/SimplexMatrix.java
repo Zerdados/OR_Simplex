@@ -112,6 +112,7 @@ public class SimplexMatrix {
         this.printMatrix();
         MathUtility.simplexIteration(matrix_data, p);
         this.printMatrix();
-        //MathUtility.simplexIteration(matrix_data, p);
+        MathUtility.simplexIteration(matrix_data, p);
+        this.printMatrix();
     }
 }
