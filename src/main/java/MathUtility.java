@@ -368,6 +368,7 @@ public class MathUtility {
             switch(p){
                 case 1:
                     inMatrix[pivot[0]][i] = BigFraction.parse(inMatrix[pivot[0]][i]).divide(pivotFraction).toString();
+                    System.out.println(SimplexFraction.fractionToString(BigFraction.parse(inMatrix[pivot[0]][i]).divide(pivotFraction)));
                     break;
                 default:
                     inMatrix[pivot[0]][i] = ((new BigDecimal(inMatrix[pivot[0]][i])).divide(pivotElement, 100, RoundingMode.HALF_EVEN)).toString();
@@ -386,7 +387,6 @@ public class MathUtility {
      * @param pivot position of the pivot-element as an int-array
      */
     private static void columnNormalization(double[][] inMatrix, int[] pivot){
-
 
         for(int i = 0; i < inMatrix.length; i++){
 
@@ -435,6 +435,7 @@ public class MathUtility {
                 switch (p){
                     case 1:
                         BigFraction f_factor2 = f_factor.multiply(BigFraction.parse(inMatrix[pivot[0]][j]));
+                        System.out.println(SimplexFraction.fractionToString(BigFraction.parse(inMatrix[i][j]).add(f_factor2)));
                         inMatrix[i][j] = BigFraction.parse(inMatrix[i][j]).add(f_factor2).toString();
                         break;
                     default:

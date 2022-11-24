@@ -13,7 +13,7 @@ public class SimplexFraction {
             return bf.getNumerator().toString();
         }
         if(bf.getNumerator().signum() == -1 && bf.getDenominator().signum() == -1){
-            output = bf.getNumerator().negate() + "/" + bf.getDenominator().negate();
+            output = bf.getNumerator().negate().toString();
             if(!bf.getDenominator().equals(BigInteger.valueOf(-1))){
                 output += "/" + bf.getDenominator().negate();
             }
