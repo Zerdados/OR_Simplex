@@ -3,7 +3,6 @@ import java.awt.event.WindowEvent;
 
 public class SimpleSimplex {
 
-    public static double[][] simplexMatrix;
     public static SimplexMatrix matrix;
     public static int var = 3;
     public static int res = 5;
@@ -17,12 +16,7 @@ public class SimpleSimplex {
     public static void main(String[] args){
 
         simplex_gui = new GuiProgram(var,res);
-
-        simplexMatrix = new double[res + 1][var + res + 1];
-
         matrix = new SimplexMatrix(var, res, simplex_gui);
-
-        simplexMatrix[0][var + res] = 0;
 
         simplex_gui.addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent we){
@@ -38,62 +32,10 @@ public class SimpleSimplex {
      */
     public static void simplex(){
 
-        String input;
         matrix.inputData(1);
-
-        for(int i = 0; i < simplexMatrix.length; i++){
-
-            for(int j = 0; j < var; j++){
-
-                input = simplex_gui.functions[i+1].textFields[j].getText();
-                //simplexMatrix[i][j] = MathUtility.simplifyDouble(Double.parseDouble(input)).doubleValue();
-
-            }
-
-            for(int j = var; j < (var + res); j++){
-
-                simplexMatrix[i][j] = 0;
-
-            }
-
-            if(i > 0) {
-
-                input = simplex_gui.functions[i+1].textFields[var].getText();
-                //simplexMatrix[i][var + res] = MathUtility.simplifyDouble(Double.parseDouble(input)).doubleValue();
-                simplexMatrix[i][var + i - 1] = 1.0;
-
-            }
-
-        }
-
         matrix.solveTest(1);
-        printMatrix();
-        //MathUtility.simplexIteration(simplexMatrix);
-        System.out.println();
-        printMatrix();
-        //MathUtility.simplexIteration(simplexMatrix);
-        System.out.println();
-        printMatrix();
         simplex_gui.setSize(500,700);
         simplex_gui.setVisible(true);
-
-    }
-
-    /**
-     * Prints simplexMatrix into the console
-     */
-    public static void printMatrix(){
-
-        for(int i = 0; i < simplexMatrix.length; i++){
-
-            for(int j = 0; j < simplexMatrix[i].length; j++){
-
-                System.out.print(simplexMatrix[i][j] + " : ");
-
-            }
-
-            System.out.println();
-        }
 
     }
 
