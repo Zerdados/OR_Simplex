@@ -325,7 +325,7 @@ public class MathUtility {
 
             switch(p){
                 case 1:
-                    inMatrix[pivot[0]][i] = BigFraction.parse(inMatrix[pivot[0]][i]).divide(pivotFraction).toString();
+                    inMatrix[pivot[0]][i] = SimplexFraction.fractionToString(BigFraction.parse(inMatrix[pivot[0]][i]).divide(pivotFraction));
                     System.out.println(SimplexFraction.fractionToString(BigFraction.parse(inMatrix[pivot[0]][i]).divide(pivotFraction)));
                     break;
                 default:
@@ -364,7 +364,7 @@ public class MathUtility {
                     case 1:
                         BigFraction f_factor2 = f_factor.multiply(BigFraction.parse(inMatrix[pivot[0]][j]));
                         System.out.println(SimplexFraction.fractionToString(BigFraction.parse(inMatrix[i][j]).add(f_factor2)));
-                        inMatrix[i][j] = BigFraction.parse(inMatrix[i][j]).add(f_factor2).toString();
+                        inMatrix[i][j] = SimplexFraction.fractionToString(BigFraction.parse(inMatrix[i][j]).add(f_factor2));
                         break;
                     default:
                         BigDecimal factor2 = simplifyStringToBigDecimal((factor.multiply(new BigDecimal(inMatrix[pivot[0]][j]))).toString());
